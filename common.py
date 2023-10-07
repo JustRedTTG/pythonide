@@ -30,7 +30,7 @@ def if_joined_does_not_exist_make_it(_path, *paths): return if_it_does_not_exist
 def if_joined_does_not_exist_remake_it(_path, *paths): if_it_does_not_exist_remake_it( os.path.join(_path, *paths) )
 
 
-def create_title(config) -> str: return f"OCMD Editor {APP_VERSION} {APP_CHANNEL} - {config.current_project.title}"
+def create_title(config) -> str: return f"{APP_NAME} {APP_VERSION} {APP_CHANNEL} - {config.current_project.title}"
 
 
 def mouse_rect(spoof) -> pe.rect.Rect: return pe.rect.Rect(*pe.mouse.pos(spoof),1,1)
