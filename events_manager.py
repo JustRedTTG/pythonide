@@ -7,9 +7,9 @@ from common import cursor_index, custom_split
 def move_cursor_line(amount: int, config: Config):
     current_line, _ = cursor_index(
         config.cursor_location, config.code)
-    new_line = max(0, min(current_line+amount, len(config.code)-1))  # CAP
+    new_line = max(0, min(current_line + amount, len(config.code) - 1))  # CAP
     index_new_line = sum([len(line) for line in config.code[0:new_line]])
-    max_line_index = len(config.code[new_line]) - (1 if new_line < len(config.code)-1 else 0)
+    max_line_index = len(config.code[new_line]) - (1 if new_line < len(config.code) - 1 else 0)
     config.cursor_location = index_new_line + min(
         max_line_index, config.cursor_up_down_max)
     config.current_project.set_cursor_location(config)
@@ -19,26 +19,28 @@ def move_cursor_index(amount: int, config: Config):
     config.cursor_up_down_max = 0
     config.cursor_location += amount
     config.current_project.set_cursor_location(config)
-    config.cursor_blink_state = time.time()+.1
+    config.cursor_blink_state = time.time() + .1
 
 
 def delete_character(config: Config, line_index, character_index):
     l = list(config.code[line_index])
     if character_index >= len(l):
-        if line_index < len(config.code)-1: return
-        elif character_index >= len(l)+1: return
-    if character_index < 1: # Beginning of the line
-        if line_index == 0: return # First line
-        config.code[line_index-1] = config.code[line_index-1].rstrip('\n') + config.code[line_index]
+        if line_index < len(config.code) - 1:
+            return
+        elif character_index >= len(l) + 1:
+            return
+    if character_index < 1:  # Beginning of the line
+        if line_index == 0: return  # First line
+        config.code[line_index - 1] = config.code[line_index - 1].rstrip('\n') + config.code[line_index]
         del config.code[line_index]
         del config.code_hashes[line_index]
         del config.code_texts[line_index]
     else:
         word, _ = cursor_index(character_index, custom_split(config.code[line_index]))
         old = l.copy()
-        del l[character_index-1] # delete character
+        del l[character_index - 1]  # delete character
         if len(custom_split(''.join(old))) != len(custom_split(''.join(l))):
-            index = len(''.join(l[:character_index-2]).split())
+            index = len(''.join(l[:character_index - 2]).split())
             del config.code_texts[line_index].texts[index]
         config.code[line_index] = ''.join(l)
 
@@ -53,7 +55,7 @@ def back(config: Config):
 def delete(config: Config):
     line_index, character_index = cursor_index(
         config.cursor_location, config.code)
-    if line_index < len(config.code)-1 and character_index + 1 >= len(config.code[line_index]):
+    if line_index < len(config.code) - 1 and character_index + 1 >= len(config.code[line_index]):
         delete_character(config, line_index + 1, -1)
     else:
         delete_character(config, line_index, character_index + 1)
@@ -63,11 +65,11 @@ def delete(config: Config):
 def new_line(config: Config):
     line, index = cursor_index(config.cursor_location, config.code)
     before, after = config.code[line][:index], config.code[line][index:]
-    config.code[line] = before+'\n'
+    config.code[line] = before + '\n'
     config.code_texts[line] = None
-    config.code.insert(line+1, after)
-    config.code_texts.insert(line+1, None)
-    config.code_hashes.insert(line+1, None)
+    config.code.insert(line + 1, after)
+    config.code_texts.insert(line + 1, None)
+    config.code_hashes.insert(line + 1, None)
     move_cursor_index(1, config)
 
 
@@ -101,7 +103,7 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
         config.cursor_hold_right = 0
 
     if config.cursor_up_down_max == 0 and (pe.event.key_DOWN(pe.pygame.K_DOWN) or \
-            pe.event.key_DOWN(pe.pygame.K_UP)):
+                                           pe.event.key_DOWN(pe.pygame.K_UP)):
         config.cursor_up_down_max = cursor_index(
             config.cursor_location, config.code
         )[1]
@@ -137,24 +139,22 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
 
     if pe.event.key_DOWN(pe.pygame.K_END):
         line, index = cursor_index(config.cursor_location, config.code)
-        if line >= len(config.code)-1:
+        if line >= len(config.code) - 1:
             line_length = len(config.code[line])
         else:
-            line_length = len(config.code[line])-1
-        config.cursor_location += line_length-index
+            line_length = len(config.code[line]) - 1
+        config.cursor_location += line_length - index
 
     if pe.event.key_DOWN(pe.pygame.K_HOME):
         line, index = cursor_index(config.cursor_location, config.code)
         config.cursor_location -= index
         config.cursor_blink_state = time.time() + .1
 
-
-
     if event.type == pe.pygame.KEYDOWN:
         u: str = event.unicode
         if u and u.isprintable():
             line, index = cursor_index(config.cursor_location, config.code)
-            config.code[line] = config.code[line][:index]+u+config.code[line][index:]
+            config.code[line] = config.code[line][:index] + u + config.code[line][index:]
             move_cursor_index(1, config)
 
     if pe.event.quitCheck():
@@ -162,42 +162,42 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
         pe.Pquit()
 
 
-
 handle_events = lambda config: [handle_event(pe.event.c, config) for pe.event.c in pe.event.get()]
+
 
 def other_events(config):
     if config.cursor_hold_right and \
-        time.time() - config.cursor_hold_right >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_right >= config.cursor_start_delay:
         move_cursor_index(1, config)
         config.cursor_hold_right += config.cursor_hold_delay
 
     if config.cursor_hold_left and \
-        time.time() - config.cursor_hold_left >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_left >= config.cursor_start_delay:
         move_cursor_index(-1, config)
         config.cursor_hold_left += config.cursor_hold_delay
 
     if config.cursor_hold_up and \
-        time.time() - config.cursor_hold_up >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_up >= config.cursor_start_delay:
         move_cursor_line(-1, config)
         config.cursor_hold_up += config.cursor_hold_delay
 
     if config.cursor_hold_down and \
-        time.time() - config.cursor_hold_down >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_down >= config.cursor_start_delay:
         move_cursor_line(1, config)
         config.cursor_hold_down += config.cursor_hold_delay
 
     if config.cursor_hold_back and \
-        time.time() - config.cursor_hold_back >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_back >= config.cursor_start_delay:
         back(config)
         config.cursor_hold_back += config.cursor_hold_delay
 
     if config.cursor_hold_delete and \
-        time.time() - config.cursor_hold_delete >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_delete >= config.cursor_start_delay:
         delete(config)
         config.cursor_hold_delete += config.cursor_hold_delay
 
     if config.cursor_hold_return and \
-        time.time() - config.cursor_hold_return >= config.cursor_start_delay:
+            time.time() - config.cursor_hold_return >= config.cursor_start_delay:
         new_line(config)
         config.cursor_hold_return += config.cursor_hold_delay
 

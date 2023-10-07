@@ -7,6 +7,7 @@ from Project import Project
 from Fonts import Fonts
 from style_manager import get_style
 
+
 def initialize() -> Config:
     # Load app folders
     config_folder = appdirs.user_config_dir(APP_NAME, APP_AUTHOR, APP_CHANNEL, True)
@@ -51,6 +52,7 @@ def initialize() -> Config:
     config.font_filepaths.health_check()
 
     return config
+
 
 def get_projects(config: Config) -> list[Project, ...]:
     if config_filepath := join_exists(config.config_folder, 'projects.oce'):

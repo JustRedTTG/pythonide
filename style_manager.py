@@ -6,9 +6,11 @@ from Style import from_pallet, from_json
 
 # Load in the themes
 built_in_themes = {
-    "light": from_pallet((255, 238, 238), (255, 246, 234), (247, 233, 215), (235, 216, 195), colors.verydarkgray, colors.white),
+    "light": from_pallet((255, 238, 238), (255, 246, 234), (247, 233, 215), (235, 216, 195), colors.verydarkgray,
+                         colors.white),
     "dark": from_pallet((33, 33, 33), (50, 50, 50), (13, 115, 119), (77, 122, 119)),
-    "pastel_light": from_pallet((177, 178, 255), (170, 196, 255), (210, 218, 255), (238, 241, 255), colors.verydarkgray, colors.white),
+    "pastel_light": from_pallet((177, 178, 255), (170, 196, 255), (210, 218, 255), (238, 241, 255), colors.verydarkgray,
+                                colors.white),
     "pastel_dark": from_pallet((57, 55, 91), (116, 92, 151), (213, 151, 206), (245, 176, 203))
 }
 

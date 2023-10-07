@@ -36,7 +36,7 @@ class Style:
     file_panel_font_size: int = 12
     code_panel_font_size: int = 12
     code_sub_panel_font_size: int = 12
-    text_spacing: int # Set using space char
+    text_spacing: int  # Set using space char
 
     syntax_colors: dict[str, tuple[int, int, int]] = {
         '^': (20, 20, 20)
@@ -64,6 +64,7 @@ def from_pallet(darkest_color: tuple[int, int, int],
     style.code_cursor_select = text_color
 
     return style
+
 
 def from_json(json: dict):
     # TODO: add json compatability for themes

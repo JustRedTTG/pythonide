@@ -5,6 +5,7 @@ from Project import Project
 from common import create_title
 from text_manager import configure_file_panel_texts
 
+
 def load_project(config: Config):
     projects: list[Project, ...] = get_projects(config)
     if config.current_project_name == ':new':
@@ -14,8 +15,9 @@ def load_project(config: Config):
 
     config.current_project.load(config)
 
+
 def save_project(config: Config):
-    #TODO: project saving and management
+    # TODO: project saving and management
     pass
 
 
@@ -32,7 +34,8 @@ def load_selected_file(config):
         try:
             with open(file, 'r') as f:
                 config.opened_files_cache[file] = f.readlines()
-        except: return False
+        except:
+            return False
         finally:
             return True
     return False

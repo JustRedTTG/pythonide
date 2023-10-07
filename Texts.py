@@ -1,6 +1,7 @@
 from pygameextra.text import Text
 from pygameextra.modified import Surface
 
+
 class Texts:
     texts: list[Text]
     combined: Surface
@@ -22,7 +23,7 @@ class Texts:
         return self.combined
 
     def get_width(self, text_spaces):
-        spaces = len(self.texts)-1
+        spaces = len(self.texts) - 1
         width = spaces * text_spaces
         for text in self.texts:
             width += text.rect[2]

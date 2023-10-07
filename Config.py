@@ -7,6 +7,7 @@ from Project import Project
 from Fonts import Fonts
 from Texts import Texts
 
+
 class Config:
     # Info on data structure:
     # 0 - global 1 - yes 2 - no for global / project settings (gps)
@@ -17,7 +18,7 @@ class Config:
     # Customization data
     theme: str = "dark"
     language: str = "en"
-    global_allow_multiple_commands: bool = True # gps
+    global_allow_multiple_commands: bool = True  # gps
     window_width: int = 700
     window_height: int = 500
     cursor_hold_delay: float = .05
@@ -96,7 +97,7 @@ class Config:
     def __copy__(self):
         new_copy = Config()
         # Copy switches
-        #...
+        # ...
 
         # Copy customization data
         new_copy.theme = self.theme

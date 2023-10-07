@@ -21,22 +21,24 @@ def if_it_does_not_exist_remake_it(folder_path) -> None:
     os.makedirs(folder_path)
 
 
-def join_exists(_path, *paths) -> bool: return False if not os.path.exists( joined := os.path.join(_path, *paths) ) else joined
+def join_exists(_path, *paths) -> bool: return False if not os.path.exists(
+    joined := os.path.join(_path, *paths)) else joined
 
 
-def if_joined_does_not_exist_make_it(_path, *paths): return if_it_does_not_exist_make_it( os.path.join(_path, *paths) )
+def if_joined_does_not_exist_make_it(_path, *paths): return if_it_does_not_exist_make_it(os.path.join(_path, *paths))
 
 
-def if_joined_does_not_exist_remake_it(_path, *paths): if_it_does_not_exist_remake_it( os.path.join(_path, *paths) )
+def if_joined_does_not_exist_remake_it(_path, *paths): if_it_does_not_exist_remake_it(os.path.join(_path, *paths))
 
 
 def create_title(config) -> str: return f"{APP_NAME} {APP_VERSION} {APP_CHANNEL} - {config.current_project.title}"
 
 
-def mouse_rect(spoof) -> pe.rect.Rect: return pe.rect.Rect(*pe.mouse.pos(spoof),1,1)
+def mouse_rect(spoof) -> pe.rect.Rect: return pe.rect.Rect(*pe.mouse.pos(spoof), 1, 1)
 
 
 def surface_rect(surface: pe.Surface) -> pe.rect.Rect: return pe.rect.Rect(*surface.pos, *surface.size)
+
 
 def file_name(path): return os.path.basename(path)
 
@@ -53,7 +55,8 @@ def cursor_index(index, lines) -> tuple[int, int]:
     for lines_deep, line in enumerate(lines):
         if index >= len(line):
             index -= len(line)
-        else: break
+        else:
+            break
     else:
         index += len(line)
     return lines_deep, index
@@ -63,7 +66,8 @@ def cursor_index(index, lines) -> tuple[int, int]:
     for lines_deep, line in enumerate(lines):
         if index >= len(line):
             index -= len(line)
-        else: break
+        else:
+            break
     else:
         index += len(line)
     return lines_deep, index
@@ -72,12 +76,14 @@ def cursor_index(index, lines) -> tuple[int, int]:
 def custom_split(text: list[str]):
     l = []
     t = []
-    for v in text :
+    for v in text:
         if v == ' ':
             l.append(''.join(t))
             t.clear()
             continue
-        elif not v.isprintable(): continue
+        elif not v.isprintable():
+            continue
         t.append(v)
-    else: l.append(''.join(t))
+    else:
+        l.append(''.join(t))
     return l
