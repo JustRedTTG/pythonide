@@ -37,7 +37,8 @@ def initialize() -> Config:
     get_style(config)
 
     # Fonts
-    config.font_filepaths = Fonts
+    if_it_does_not_exist_make_it(os.path.join(data_folder, 'fonts'))
+    config.font_filepaths = Fonts()
     config.font_filepaths.regular = os.path.join(data_folder, 'fonts', config.font_filepaths.regular)
     config.font_filepaths.regular_italic = os.path.join(data_folder, 'fonts', config.font_filepaths.regular_italic)
 
@@ -46,6 +47,8 @@ def initialize() -> Config:
 
     config.font_filepaths.thin = os.path.join(data_folder, 'fonts', config.font_filepaths.thin)
     config.font_filepaths.thin_italic = os.path.join(data_folder, 'fonts', config.font_filepaths.thin_italic)
+
+    config.font_filepaths.health_check()
 
     return config
 

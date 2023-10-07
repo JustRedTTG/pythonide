@@ -2,7 +2,7 @@ import os.path
 import pygameextra as pe
 from shutil import rmtree
 
-APP_NAME = 'OCMD Editor'
+APP_NAME = 'Pythonide'
 APP_AUTHOR = 'RedTTG'
 APP_VERSION = '1.0'
 APP_CHANNEL = 'debug'

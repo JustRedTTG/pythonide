@@ -1,3 +1,4 @@
 appdirs
-pygameextra
-hexicapi
+pygameextra>=2.0.0rc1
+hexicapi==1.0.733
+requests
