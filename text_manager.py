@@ -1,8 +1,8 @@
-import Strings as strings
 from common import file_name
 from pygameextra.text import Text
 from languages import languages
-from Config import Config
+from pythonize_types.Config import Config
+import pythonize_types.Strings as Strings
 
 
 def configure_top_panel_texts(config: Config):
@@ -11,7 +11,7 @@ def configure_top_panel_texts(config: Config):
     config.top_sub_panel_width = {}
     config.top_sub_panel_height = {}
 
-    for i, (identifier, text) in enumerate(zip(strings.top_panel_identifiers,
+    for i, (identifier, text) in enumerate(zip(Strings.top_panel_identifiers,
                                                languages[config.language].top_panel_texts)):
         config.top_panel_texts.append(Text(text,
                                            config.font_filepaths.thin,

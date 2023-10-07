@@ -1,8 +1,7 @@
 import os.path
 from config_manager import get_projects
-from Config import Config
-from Project import Project
-from common import create_title
+from pythonize_types.Config import Config
+from pythonize_types.Project import Project
 from text_manager import configure_file_panel_texts
 
 

@@ -2,15 +2,14 @@ import time
 
 import pygameextra as pe
 import config_manager as cfg_mngr
-import Strings as strings
 from itertools import zip_longest
 from pygameextra.fpslogger import Logger
-from copy import copy as duplicate
 from events_manager import handle_events, other_events
-from project_manager import load_project, save_project, load_selected_file
+from project_manager import load_project, load_selected_file
 from text_manager import configure_texts, configure_file_panel_texts
 from common import create_title, mouse_rect, surface_rect, file_name, cursor_index, custom_split
-from Texts import Texts
+from pythonize_types.Texts import Texts
+import pythonize_types.Strings as Strings
 
 pe.init()
 
@@ -53,7 +52,7 @@ def top_panel():
                             text.rect[2] + config.style.top_panel_button_padding_horizontal,
                             config.top_panel_text_height),
                            config.style.background, config.style.button_select,
-                           text, top_sub_panel, (x, strings.top_panel_identifiers[i]))
+                           text, top_sub_panel, (x, Strings.top_panel_identifiers[i]))
             x += text.rect[2] + config.style.top_panel_button_padding_horizontal
         pe.display.context(context)  # Return display context
         pe.draw.line(config.style.background_shadow,
@@ -105,7 +104,7 @@ def top_sub_panel(data):
     # Render options
     y = 0
     for i, (text, button_identifier) in enumerate(zip(config.top_sub_panel_texts[identifier],
-                                                      strings.top_sub_panel_identifiers[identifier])):
+                                                      Strings.top_sub_panel_identifiers[identifier])):
         if button_identifier == '_%_':
             # y +=
             pe.draw.line(config.style.background_shadow, (0, y),

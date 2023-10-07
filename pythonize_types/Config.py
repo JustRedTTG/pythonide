@@ -2,10 +2,10 @@ from pygameextra import Surface
 from pygameextra.text import Text
 from hexicapi.save import save
 from copy import copy as duplicate
-from Style import Style
-from Project import Project
-from Fonts import Fonts
-from Texts import Texts
+from .Style import Style
+from .Project import Project
+from .Fonts import Fonts
+from .Texts import Texts
 
 
 class Config:

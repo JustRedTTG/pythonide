@@ -2,9 +2,9 @@ import os.path
 import appdirs
 from hexicapi.save import load
 from common import APP_NAME, APP_AUTHOR, APP_CHANNEL, if_it_does_not_exist_make_it, join_exists
-from Config import Config
-from Project import Project
-from Fonts import Fonts
+from pythonize_types.Config import Config
+from pythonize_types.Project import Project
+from pythonize_types.Fonts import Fonts
 from style_manager import get_style
 
 

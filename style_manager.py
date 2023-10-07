@@ -1,8 +1,8 @@
 import json
 from pygameextra import colors
 from common import if_joined_does_not_exist_make_it, join_exists
-from Config import Config
-from Style import from_pallet, from_json
+from pythonize_types.Config import Config
+from pythonize_types.Style import from_pallet, from_json
 
 # Load in the themes
 built_in_themes = {
