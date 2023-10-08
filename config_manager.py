@@ -1,7 +1,7 @@
 import os.path
 import appdirs
 from hexicapi.save import load
-from common import APP_NAME, APP_AUTHOR, APP_CHANNEL, if_it_does_not_exist_make_it, join_exists
+from common import APP_NAME, APP_AUTHOR, APP_CHANNEL, APP_EXTENSION, if_it_does_not_exist_make_it, join_exists
 from pythonize_types.Config import Config
 from pythonize_types.Project import Project
 from pythonize_types.Fonts import Fonts
@@ -19,7 +19,7 @@ def initialize() -> Config:
     if_it_does_not_exist_make_it(data_folder)
     if_it_does_not_exist_make_it(cache_folder)
 
-    if config_filepath := join_exists(config_folder, 'config.oce'):
+    if config_filepath := join_exists(config_folder, f'config.{APP_EXTENSION}'):
         # Load available config file
         config: Config = load(config_filepath)[0]
     else:
@@ -30,7 +30,7 @@ def initialize() -> Config:
     # Insert temporary data
     # App folders
     config.config_folder = config_folder
-    config.config_filepath = config_filepath or os.path.join(config_folder, 'config.oce')
+    config.config_filepath = config_filepath or os.path.join(config_folder, f'config.{APP_EXTENSION}')
     config.data_folder = data_folder
     config.cache_folder = cache_folder
 
@@ -55,7 +55,7 @@ def initialize() -> Config:
 
 
 def get_projects(config: Config) -> list[Project, ...]:
-    if config_filepath := join_exists(config.config_folder, 'projects.oce'):
+    if config_filepath := join_exists(config.config_folder, f'projects.{APP_EXTENSION}'):
         # Load projects
         return load(config_filepath)
     return []

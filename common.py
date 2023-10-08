@@ -6,6 +6,7 @@ APP_NAME = 'Pythonide'
 APP_AUTHOR = 'RedTTG'
 APP_VERSION = '1.0'
 APP_CHANNEL = 'debug'
+APP_EXTENSION = 'pide'
 
 
 def if_it_does_not_exist_make_it(folder_path) -> bool:
