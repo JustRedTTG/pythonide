@@ -3,10 +3,11 @@ import pygameextra as pe
 from config_manager import Config
 from common import cursor_index, custom_split
 
+def get_cursor_line(config: Config):
+    return cursor_index(config.cursor_location, config.code)[0]
 
 def move_cursor_line(amount: int, config: Config):
-    current_line, _ = cursor_index(
-        config.cursor_location, config.code)
+    current_line = get_cursor_line(config)
     new_line = max(0, min(current_line + amount, len(config.code) - 1))  # CAP
     index_new_line = sum([len(line) for line in config.code[0:new_line]])
     max_line_index = len(config.code[new_line]) - (1 if new_line < len(config.code) - 1 else 0)
@@ -35,6 +36,7 @@ def delete_character(config: Config, line_index, character_index):
         del config.code[line_index]
         del config.code_hashes[line_index]
         del config.code_texts[line_index]
+        config.code_sub_panel_active = True
     else:
         word, _ = cursor_index(character_index, custom_split(config.code[line_index]))
         old = l.copy()
@@ -71,6 +73,7 @@ def new_line(config: Config):
     config.code_texts.insert(line + 1, None)
     config.code_hashes.insert(line + 1, None)
     move_cursor_index(1, config)
+    config.code_sub_panel_active = True
 
 
 def handle_event(event: pe.pygame.event.Event, config: Config):
@@ -91,13 +94,19 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
         config.code_sub_panel_active = False
 
     if pe.event.key_DOWN(pe.pygame.K_LEFT):
+        prev = get_cursor_line(config)
         move_cursor_index(-1, config)
+        if not prev == get_cursor_line(config):
+            config.code_sub_panel_active = True
         config.cursor_hold_left = time.time()
     elif pe.event.key_UP(pe.pygame.K_LEFT):
         config.cursor_hold_left = 0
 
     if pe.event.key_DOWN(pe.pygame.K_RIGHT):
+        prev = get_cursor_line(config)
         move_cursor_index(1, config)
+        if not prev == get_cursor_line(config):
+            config.code_sub_panel_active = True
         config.cursor_hold_right = time.time()
     elif pe.event.key_UP(pe.pygame.K_RIGHT):
         config.cursor_hold_right = 0
@@ -110,12 +119,14 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
 
     if pe.event.key_DOWN(pe.pygame.K_DOWN):
         move_cursor_line(1, config)
+        config.code_sub_panel_active = True
         config.cursor_hold_down = time.time()
     elif pe.event.key_UP(pe.pygame.K_DOWN):
         config.cursor_hold_down = 0
 
     if pe.event.key_DOWN(pe.pygame.K_UP):
         move_cursor_line(-1, config)
+        config.code_sub_panel_active = True
         config.cursor_hold_up = time.time()
     elif pe.event.key_UP(pe.pygame.K_UP):
         config.cursor_hold_up = 0
@@ -168,22 +179,30 @@ handle_events = lambda config: [handle_event(pe.event.c, config) for pe.event.c 
 def other_events(config):
     if config.cursor_hold_right and \
             time.time() - config.cursor_hold_right >= config.cursor_start_delay:
+        prev = get_cursor_line(config)
         move_cursor_index(1, config)
+        if not prev == get_cursor_line(config):
+            config.code_sub_panel_active = True
         config.cursor_hold_right += config.cursor_hold_delay
 
     if config.cursor_hold_left and \
             time.time() - config.cursor_hold_left >= config.cursor_start_delay:
+        prev = get_cursor_line(config)
         move_cursor_index(-1, config)
+        if not prev == get_cursor_line(config):
+            config.code_sub_panel_active = True
         config.cursor_hold_left += config.cursor_hold_delay
 
     if config.cursor_hold_up and \
             time.time() - config.cursor_hold_up >= config.cursor_start_delay:
         move_cursor_line(-1, config)
+        config.code_sub_panel_active = True
         config.cursor_hold_up += config.cursor_hold_delay
 
     if config.cursor_hold_down and \
             time.time() - config.cursor_hold_down >= config.cursor_start_delay:
         move_cursor_line(1, config)
+        config.code_sub_panel_active = True
         config.cursor_hold_down += config.cursor_hold_delay
 
     if config.cursor_hold_back and \

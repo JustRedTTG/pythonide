@@ -315,7 +315,14 @@ def code_panel():
 
 
 def code_sub_panel():
-    if config.code_sub_panel_active:
+    if not config.code_sub_panel_surface:
+        height_offset = config.top_panel_text_height + config.file_panel_text_height
+        config.code_sub_panel_surface = pe.Surface((
+            config.style.code_sub_panel_width,
+            config.window_height - height_offset
+        ))
+        config.code_sub_panel_active = True
+    elif config.code_sub_panel_active:
         pe.fill.full(config.style.background_darker, config.code_sub_panel_surface)  # Fill with background
         y = 0
         line, _ = cursor_index(config.cursor_location, config.code)
@@ -342,13 +349,7 @@ def code_sub_panel():
                      (config.style.code_sub_panel_width, config.code_sub_panel_surface.size[1]),
                      3, config.code_sub_panel_surface
                      )
-    elif not config.code_sub_panel_surface:
-        height_offset = config.top_panel_text_height + config.file_panel_text_height
-        config.code_sub_panel_surface = pe.Surface((
-            config.style.code_sub_panel_width,
-            config.window_height - height_offset
-        ))
-        config.code_sub_panel_active = True
+        config.code_sub_panel_active = False
 
 
 print(f"{common.APP_NAME} by {common.APP_AUTHOR} version {common.APP_VERSION} {common.APP_CHANNEL}")
