@@ -1,6 +1,8 @@
 import time
 
 import pygameextra as pe
+
+import common
 import config_manager as cfg_mngr
 from itertools import zip_longest
 from pygameextra.fpslogger import Logger
@@ -349,6 +351,7 @@ def code_sub_panel():
         config.code_sub_panel_active = True
 
 
+print(f"{common.APP_NAME} by {common.APP_AUTHOR} version {common.APP_VERSION} {common.APP_CHANNEL}")
 pe.display.make(config.window_size(), create_title(config), pe.display.DISPLAY_MODE_RESIZABLE)
 while True:
     handle_events(config)

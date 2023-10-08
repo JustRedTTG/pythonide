@@ -25,6 +25,7 @@ class Config:
     cursor_start_delay: float = .2
     cursor_blink_time_in: float = .5
     cursor_blink_time_out: float = .7
+    console_mode: bool = False
 
     # Project data
     current_project: Project

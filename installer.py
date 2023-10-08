@@ -1,13 +1,20 @@
 import os
-import config_manager as cfg_mngr
+import platform
+import subprocess
 import atexit
 import hashlib
+
+print("Ensure directory is correct...")
+os.chdir(script_dir := os.path.dirname(os.path.abspath(__file__)))
+
+import config_manager as cfg_mngr
 from common import APP_VERSION, APP_NAME
 
 print(f"Initializing {APP_NAME} configuration")
 config = cfg_mngr.initialize()
 
 INSTALL_DIR = os.path.join(config.data_folder, 'application', APP_VERSION)
+VENV_DIR = os.path.join(INSTALL_DIR, 'venv')
 HASH_FILE_PATH = os.path.join(INSTALL_DIR, 'hash_list.txt')
 VERSION_FILE_PATH = os.path.join(config.data_folder, 'version.txt')
 
@@ -24,6 +31,7 @@ def close_hash_file():
     hash_file.close()
     print("Closing hash file")
 
+
 def yes_no(question):
     while True:
         answer = input(f"{question} (y/N): ").strip().lower()
@@ -32,6 +40,7 @@ def yes_no(question):
         if answer in ['y', 'n', 'yes', 'no']:
             return answer == 'y' or answer == 'yes'
         print("Invalid input, try again")
+
 
 def write_version():
     if os.path.exists(VERSION_FILE_PATH):
@@ -49,6 +58,7 @@ def write_version():
     with open(VERSION_FILE_PATH, 'w') as f:
         f.write(APP_VERSION)
         print("Writing version file")
+
 
 atexit.register(write_version)
 atexit.register(close_hash_file)
@@ -69,6 +79,17 @@ for file in os.listdir('pythonize_types'):
     if file.endswith('.py'):
         files.append(os.path.join('pythonize_types', file))
 
+print("Checking virtual environment...")
+
+if platform.system() == "Windows":
+    pip_script = os.path.join(VENV_DIR, 'Scripts', 'pip.exe')
+else:
+    pip_script = os.path.join(VENV_DIR, 'bin', 'pip')
+if not os.path.exists(pip_script):
+    subprocess.run(['python', '-m', 'venv', VENV_DIR])
+
+subprocess.run([pip_script, 'install', '-r', os.path.join(os.getcwd(), 'requirements.txt')])
+
 print(f"Installing {APP_NAME} version {APP_VERSION}...")
 for file in files:
     folder, filename = os.path.dirname(file), os.path.basename(file)
@@ -76,7 +97,9 @@ for file in files:
     if file == 'launcher.py':
         with open(os.path.join(config.data_folder, filename), 'wb') as f:
             f.write(open(file, 'rb').read())
-            print("Update to latest launcher")
+        with open(os.path.join(config.data_folder, f'{filename}w'), 'wb') as f:
+            f.write(open(file, 'rb').read())
+        print("Update to latest launcher")
         continue
     with open(os.path.join(INSTALL_DIR, folder, filename), 'wb') as f:
         f.write(data := open(file, 'rb').read())

@@ -1,5 +1,7 @@
 import os
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 class Fonts:
     regular: str = 'JetBrainsMono-Regular.ttf'
@@ -15,7 +17,7 @@ class Fonts:
         for font in self.__dict__.values():
             if not os.path.exists(font):
                 filename = os.path.basename(font)
-                if os.path.exists(data_path := os.path.join('../data', 'fonts', filename)):
+                if os.path.exists(data_path := os.path.join(script_dir, '..', 'data', 'fonts', filename)):
                     with open(font, 'wb') as f:
                         f.write(open(data_path, 'rb').read())
                         continue
