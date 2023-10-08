@@ -1,6 +1,7 @@
 import os
 import platform
 import subprocess
+from shutil import rmtree
 import atexit
 import hashlib
 
@@ -34,9 +35,9 @@ def close_hash_file():
 
 def yes_no(question):
     while True:
-        answer = input(f"{question} (y/N): ").strip().lower()
+        answer = input(f"{question} (Y/n): ").strip().lower()
         if not answer:
-            return False
+            return True
         if answer in ['y', 'n', 'yes', 'no']:
             return answer == 'y' or answer == 'yes'
         print("Invalid input, try again")
@@ -54,6 +55,11 @@ def write_version():
             print(f"Current installation package version: {APP_VERSION}")
             if not yes_no("Do you want to overwrite the current installation package version?"):
                 return
+
+            old_path = os.path.join(config.data_folder, 'application', old_version)
+            if os.path.isdir(old_path):
+                if yes_no("Do you want to delete the previous version installation?"):
+                    rmtree(old_path)
 
     with open(VERSION_FILE_PATH, 'w') as f:
         f.write(APP_VERSION)
