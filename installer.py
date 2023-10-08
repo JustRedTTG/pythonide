@@ -47,10 +47,10 @@ for file in files:
     os.makedirs(os.path.join(INSTALL_DIR, folder), exist_ok=True)
     with open(os.path.join(INSTALL_DIR, folder, filename), 'wb') as f:
         f.write(data := open(file, 'rb').read())
-        hash_file.write(f'{filename}={(hashed_data := hashlib.sha256(data).hexdigest())}\n')
+        hash_file.write(f'{file}={(hashed_data := hashlib.sha256(data).hexdigest())}\n')
         print(f"COPY {filename} {hashed_data}")
     if filename == 'editor.py':
         with open(os.path.join(INSTALL_DIR, folder, f'{filename}w'), 'wb') as f:
             f.write(data)
-            hash_file.write(f'{filename}w={hashed_data}\n')
+            hash_file.write(f'{file}w={hashed_data}\n')
             print("DUPLICATE editor.py AS editor.pyw for no console")
