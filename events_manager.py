@@ -3,8 +3,10 @@ import pygameextra as pe
 from config_manager import Config
 from common import cursor_index, custom_split
 
+
 def get_cursor_line(config: Config):
     return cursor_index(config.cursor_location, config.code)[0]
+
 
 def move_cursor_line(amount: int, config: Config):
     current_line = get_cursor_line(config)

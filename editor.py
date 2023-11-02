@@ -257,8 +257,10 @@ def code_panel():
             rerun = True
 
         x = config.code_sub_panel_surface.size[0] + config.style.code_panel_padding
+        view_width = config.code_panel_surface.surface.get_width()
         cursor_line, cursor_indexing = cursor_index(config.cursor_location, config.code)
         cursor_x = x + config.style.text_spacing * cursor_indexing
+
         for i, (line, hashing, texts) in enumerate(zip_longest(config.code, config.code_hashes, config.code_texts)):
             config.syntax_color_lock = None
             check_for_changes = hash(line) != hashing
@@ -288,12 +290,12 @@ def code_panel():
         y = 0
         for linei, texts in enumerate(config.code_texts):
             if texts.combined:
-                pe.display.blit(texts.combined, (x, y))
+                pe.display.blit(texts.combined, [v+o for v, o in zip((x, y), config.code_panel_surface_offset)])
             else:
                 texts.combine(config.style.text_spacing, config.code_text_height)
             y += texts.combined.size[1]
             if cursor_line == linei and time.time() - config.cursor_blink_state < config.cursor_blink_time_in:
-                pe.draw.line(config.style.code_cursor_select, (cursor_x, y), (cursor_x, y - texts.combined.size[1]),
+                pe.draw.line(config.style.code_cursor_select, [v+o for v, o in zip((cursor_x, y), config.code_panel_surface_offset)], [v+o for v, o in zip((cursor_x, y - texts.combined.size[1]), config.code_panel_surface_offset)],
                              config.style.code_cursor_width)
 
         #
@@ -310,6 +312,7 @@ def code_panel():
             height_offset
         )
         config.code_panel_active = True
+        config.on_cursor_move()
     if rerun:
         code_panel()
 

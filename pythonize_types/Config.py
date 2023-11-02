@@ -2,6 +2,8 @@ from pygameextra import Surface
 from pygameextra.text import Text
 from hexicapi.save import save
 from copy import copy as duplicate
+
+from common import cursor_index
 from .Style import Style
 from .Project import Project
 from .Fonts import Fonts
@@ -79,6 +81,7 @@ class Config:
     top_sub_panel_identifier: str
     top_sub_panel_x: int
     code_text_height: int = None
+    code_panel_surface_offset: tuple[int, int] = (0, 0)
 
     # Temporary file data
     opened_files_cache: dict[str, str] = {}
@@ -88,7 +91,8 @@ class Config:
     code: list[str] = ['']
     code_texts: list[Texts, ...] = []
     code_hashes: list[int, ...] = []
-    cursor_location: int = 0
+    cursor_location: int
+    _cursor_location: int = 0
     cursor_up_down_max: int = 0
 
     def save(self):
@@ -118,3 +122,19 @@ class Config:
 
     def window_size(self):
         return self.window_width, self.window_height
+
+    def on_cursor_move(self):
+        _, cursor_indexing = cursor_index(self.cursor_location, self.code)
+        cursor_x = self.code_sub_panel_surface.size[0] + self.style.code_panel_padding + self.style.text_spacing * cursor_indexing
+        self.code_panel_surface_offset = (min(self.code_panel_surface.size[0] - cursor_x - 30, 0), 0)
+
+    @property
+    def cursor_location(self):
+        return self._cursor_location
+
+    @cursor_location.setter
+    def cursor_location(self, value):
+        _ = self._cursor_location
+        self._cursor_location = value
+        if _ != self._cursor_location:
+            self.on_cursor_move()
