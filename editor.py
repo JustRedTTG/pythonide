@@ -3,12 +3,13 @@ import time
 import pygameextra as pe
 
 import common
-import config_manager as cfg_mngr
+from managers import config_manager as cfg_mngr
 from itertools import zip_longest
 from pygameextra.fpslogger import Logger
-from events_manager import handle_events, other_events
-from project_manager import load_project, load_selected_file
-from text_manager import configure_texts, configure_file_panel_texts
+from managers.events_manager import handle_events, other_events
+from managers.project_manager import load_project, load_selected_file
+from managers.text_manager import configure_texts, configure_file_panel_texts
+from managers.draggables_manager import configure_draggables
 from common import create_title, mouse_rect, surface_rect, file_name, cursor_index, custom_split
 from pythonize_types.Texts import Texts
 import pythonize_types.Strings as Strings
@@ -19,6 +20,7 @@ logger = Logger()
 config = cfg_mngr.initialize()
 load_project(config)
 configure_texts(config)
+configure_draggables(config)
 pe.settings.hover_lock_enabled = False
 
 

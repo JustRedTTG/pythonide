@@ -5,7 +5,7 @@ from common import APP_NAME, APP_AUTHOR, APP_CHANNEL, APP_EXTENSION, if_it_does_
 from pythonize_types.Config import Config
 from pythonize_types.Project import Project
 from pythonize_types.Fonts import Fonts
-from style_manager import get_style
+from .style_manager import get_style
 
 
 def initialize() -> Config:

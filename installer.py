@@ -8,7 +8,7 @@ import hashlib
 print("Ensure directory is correct...")
 os.chdir(script_dir := os.path.dirname(os.path.abspath(__file__)))
 
-import config_manager as cfg_mngr
+from managers import config_manager as cfg_mngr
 from common import APP_VERSION, APP_NAME
 
 print(f"Initializing {APP_NAME} configuration")

@@ -1,6 +1,6 @@
 import time
 import pygameextra as pe
-from config_manager import Config
+from managers.config_manager import Config
 from common import cursor_index, custom_split
 
 

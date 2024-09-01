@@ -1,8 +1,8 @@
 import os.path
-from config_manager import get_projects
+from managers.config_manager import get_projects
 from pythonize_types.Config import Config
 from pythonize_types.Project import Project
-from text_manager import configure_file_panel_texts
+from .text_manager import configure_file_panel_texts
 
 
 def load_project(config: Config):

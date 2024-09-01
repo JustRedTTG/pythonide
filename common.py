@@ -11,7 +11,7 @@ APP_EXTENSION = 'pide'
 
 def if_it_does_not_exist_make_it(folder_path) -> bool:
     if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+        os.makedirs(folder_path, exist_ok=True)
         return True
     return False
 

@@ -1,4 +1,6 @@
-from pygameextra import Surface
+from typing import List, Tuple
+
+from pygameextra import Surface, Draggable
 from pygameextra.text import Text
 from hexicapi.save import save
 from copy import copy as duplicate
@@ -54,7 +56,7 @@ class Config:
     file_panel_active: bool = False
     code_panel_active: bool = False
     code_sub_panel_active: bool = False
-    syntax_color_lock: tuple[int, int, int] = None
+    syntax_color_lock: Tuple[int, int, int] = None
     cursor_hold_left: int = 0
     cursor_hold_right: int = 0
     cursor_hold_down: int = 0
@@ -65,11 +67,11 @@ class Config:
     cursor_blink_state: float = 0
 
     # Temporary text data
-    top_panel_texts: list[Text, ...]
-    file_panel_texts: list[Text, ...]
-    top_sub_panel_texts: dict[str, list[Text, ...]]
-    code_sub_panel_texts: list[Text, ...] = []
-    code_sub_panel_texts_selected: list[Text, ...] = []
+    top_panel_texts: List[Text]
+    file_panel_texts: List[Text]
+    top_sub_panel_texts: dict[str, List[Text]]
+    code_sub_panel_texts: List[Text] = []
+    code_sub_panel_texts_selected: List[Text] = []
 
     # Temporary coordination data
     top_panel_text_height: int
@@ -85,11 +87,12 @@ class Config:
 
     # Cache
     style: Style
-    code: list[str] = ['']
-    code_texts: list[Texts, ...] = []
-    code_hashes: list[int, ...] = []
+    code: List[str] = ['']
+    code_texts: List[Texts] = []
+    code_hashes: List[int] = []
     cursor_location: int = 0
     cursor_up_down_max: int = 0
+    code_inbetween_draggable: Draggable = None
 
     def save(self):
         clone = duplicate(self)
