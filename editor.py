@@ -29,7 +29,7 @@ def top_panel():
     if config.top_sub_panel_surface:  # it exists
         # Check if the mouse is within it, quit the checks below for top panel to prevent close
         if mouse_rect(False).colliderect(surface_rect(config.top_sub_panel_surface)):
-            top_sub_panel((config.top_sub_panel_x, config.top_sub_panel_identifier))
+            top_sub_panel(config.top_sub_panel_x, config.top_sub_panel_identifier)
             return
         elif not config.top_sub_panel_active:  # Disable sub panel is unactivated
             config.top_sub_panel_surface = None
@@ -54,7 +54,7 @@ def top_panel():
                             text.rect[2] + config.style.top_panel_button_padding_horizontal,
                             config.top_panel_text_height),
                            config.style.background, config.style.button_select,
-                           text, top_sub_panel, (x, Strings.top_panel_identifiers[i]))
+                           text, hover_action=top_sub_panel, hover_data=(x, Strings.top_panel_identifiers[i]))
             x += text.rect[2] + config.style.top_panel_button_padding_horizontal
         pe.display.context(context)  # Return display context
         pe.draw.line(config.style.background_shadow,
@@ -78,9 +78,8 @@ def on_top_panel(identifier, sub):
     config.top_panel_active = True
 
 
-def top_sub_panel(data):
+def top_sub_panel(x, identifier):
     global config
-    x, identifier = data
 
     # Disable button locking and align mouse
     pe.settings.spoof_mouse_position = pe.mouse.pos()
@@ -118,19 +117,19 @@ def top_sub_panel(data):
                         config.top_sub_panel_width[identifier] - button_end,
                         config.top_panel_text_height),
                        config.style.background, config.style.button_select,
-                       hover_action=lambda data: pe.draw.rect(*data),
+                       hover_action=pe.draw.rect,
                        hover_data=(config.style.button_select,
                                    (0, y, button_end, config.top_panel_text_height), 0
-                                   ), action=lambda data: on_top_panel(*data), data=(identifier, button_identifier))
+                                   ), action=on_top_panel, data=(identifier, button_identifier))
         pe.button.rect((0, y, button_end,
                         config.top_panel_text_height),
                        (0, 0, 0, 0), config.style.button_select,
-                       text, lambda data: pe.draw.rect(*data),
-                       (config.style.button_select,
+                       text, hover_action=pe.draw.rect,
+                       hover_data=(config.style.button_select,
                         (button_end, y,
                          config.top_sub_panel_width[identifier] - button_end,
                          config.top_panel_text_height), 0
-                        ), action=lambda data: on_top_panel(*data), data=(identifier, button_identifier))
+                        ), action=on_top_panel, data=(identifier, button_identifier))
         if not config.top_sub_panel_active:
             pe.display.context(context)
             return
@@ -183,7 +182,7 @@ def file_panel():  # Opened files, not the left panel
                             config.file_panel_text_height),
                            *(config.style.background, config.style.button_select) if not selected else
                            (config.style.code, config.style.code),
-                           text, action=lambda data: config.current_project.set_selected_file(*data),
+                           text, action=config.current_project.set_selected_file,
                            data=(file, config))
             x += text.rect[2] + config.style.file_panel_button_padding_horizontal
         pe.display.context(context)
@@ -232,7 +231,7 @@ def make_word(word, i=None, i2=None):
 def code_panel():
     global config
     rerun = False
-    if config.code_panel_active:
+    if config.code_panel_active and not config.top_sub_panel_active:
         pe.fill.full(config.style.code, config.code_panel_surface)  # Fill with background
         context = pe.display.display_reference  # Save display backup
         pe.display.context(config.code_panel_surface)  # Set the context to top panel
@@ -351,7 +350,12 @@ def code_sub_panel():
         config.code_sub_panel_active = True
 
 
-print(f"{common.APP_NAME} by {common.APP_AUTHOR} version {common.APP_VERSION} {common.APP_CHANNEL}")
+print(
+    f"{common.APP_NAME} by "
+    f"{common.APP_AUTHOR} version "
+    f"{common.APP_VERSION} {common.APP_CHANNEL} "
+    f"running on PGE version {pe.__version__}"
+)
 pe.display.make(config.window_size(), create_title(config), pe.display.DISPLAY_MODE_RESIZABLE)
 while True:
     handle_events(config)
