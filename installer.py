@@ -9,17 +9,18 @@ print("Ensure directory is correct...")
 os.chdir(script_dir := os.path.dirname(os.path.abspath(__file__)))
 
 from managers import config_manager as cfg_mngr
-from common import APP_VERSION, APP_NAME
+from installation import APP_VERSION, APP_NAME
 
 print(f"Initializing {APP_NAME} configuration")
 config = cfg_mngr.initialize()
 
 INSTALL_DIR = os.path.join(config.data_folder, 'application', APP_VERSION)
-VENV_DIR = os.path.join(INSTALL_DIR, 'venv')
+VENV_DIR = os.path.join(INSTALL_DIR, '.venv')
 HASH_FILE_PATH = os.path.join(INSTALL_DIR, 'hash_list.txt')
 VERSION_FILE_PATH = os.path.join(config.data_folder, 'version.txt')
 
 os.makedirs(INSTALL_DIR, exist_ok=True)
+print(f"Installation path: {INSTALL_DIR}")
 
 if os.path.exists(HASH_FILE_PATH):
     os.remove(HASH_FILE_PATH)
@@ -71,13 +72,16 @@ atexit.register(close_hash_file)
 
 files = [
     'common.py',
-    'config_manager.py',
+    'installation.py',
+    os.path.join('managers', '__init__.py'),
+    os.path.join('managers', 'config_manager.py'),
+    os.path.join('managers', 'events_manager.py'),
+    os.path.join('managers', 'text_manager.py'),
+    os.path.join('managers', 'style_manager.py'),
+    os.path.join('managers', 'project_manager.py'),
+    os.path.join('managers', 'draggables_manager.py'),
     'editor.py',
     'languages.py',
-    'events_manager.py',
-    'text_manager.py',
-    'style_manager.py',
-    'project_manager.py',
     'launcher.py'
 ]
 
@@ -94,25 +98,30 @@ else:
 if not os.path.exists(pip_script):
     subprocess.run(['python', '-m', 'venv', VENV_DIR])
 
-subprocess.run([pip_script, 'install', '-r', os.path.join(os.getcwd(), 'requirements.txt')])
+subprocess.run(
+    [pip_script, 'install', '-r', os.path.join(os.getcwd(), 'requirements.txt')],
+    stdout=subprocess.PIPE, stderr=subprocess.PIPE
+)
 
 print(f"Installing {APP_NAME} version {APP_VERSION}...")
 for file in files:
     folder, filename = os.path.dirname(file), os.path.basename(file)
     os.makedirs(os.path.join(INSTALL_DIR, folder), exist_ok=True)
     if file == 'launcher.py':
+        print("Update to latest launcher")
         with open(os.path.join(config.data_folder, filename), 'wb') as f:
             f.write(open(file, 'rb').read())
         with open(os.path.join(config.data_folder, f'{filename}w'), 'wb') as f:
             f.write(open(file, 'rb').read())
-        print("Update to latest launcher")
         continue
     with open(os.path.join(INSTALL_DIR, folder, filename), 'wb') as f:
+        print(f"COPY {filename} ...", end='\r')
         f.write(data := open(file, 'rb').read())
         hash_file.write(f'{file}={(hashed_data := hashlib.sha256(data).hexdigest())}\n')
         print(f"COPY {filename} {hashed_data}")
-    if file == 'editor.py':
+
+    if file in ('editor.py',):
         with open(os.path.join(INSTALL_DIR, folder, f'{filename}w'), 'wb') as f:
+            print(f"DUPLICATE {file} AS {file}w for no console")
             f.write(data)
             hash_file.write(f'{file}w={hashed_data}\n')
-            print("DUPLICATE editor.py AS editor.pyw for no console")

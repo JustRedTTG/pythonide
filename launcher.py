@@ -59,11 +59,11 @@ print("Health check complete, no errors found.")
 os.chdir(app_dir)
 sys.path.append(os.getcwd())
 
-from common import APP_NAME
+from installation import APP_NAME
 
 print(f"Launching {APP_NAME}...\n")
 
-VENV_DIR = os.path.join(os.getcwd(), 'venv')
+VENV_DIR = os.path.join(os.getcwd(), '.venv')
 
 if not os.path.isdir(VENV_DIR):
     exit("No venv directory found, ensure proper installation.")
@@ -73,5 +73,11 @@ if platform.system() == "Windows":
 else:
     python_script = os.path.join(VENV_DIR, 'bin', 'python')
 
-subprocess.run([python_script, '.'.join(('editor', __file__.split('.')[-1]))],
-               creationflags=subprocess.CREATE_NO_WINDOW)
+ext = __file__.rsplit('.', 1)[-1]
+args = [python_script, f"editor.{ext}"]
+if ext == "pyw":
+    subprocess.run(args, creationflags=subprocess.CREATE_NO_WINDOW)
+else:
+    subprocess.run(args)
+
+print()

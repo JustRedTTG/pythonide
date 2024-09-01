@@ -1,0 +1,5 @@
+APP_NAME = 'PythonIDE'
+APP_AUTHOR = 'RedTTG'
+APP_VERSION = '1.0'
+APP_CHANNEL = 'debug'
+APP_EXTENSION = 'pide'
