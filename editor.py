@@ -11,8 +11,8 @@ from managers.project_manager import load_project, load_selected_file
 from managers.text_manager import configure_texts, configure_file_panel_texts
 from managers.draggables_manager import configure_draggables
 from common import create_title, mouse_rect, surface_rect, file_name, cursor_index, custom_split
-from pythonize_types.Texts import Texts
-import pythonize_types.Strings as Strings
+from pythonide_types.Texts import Texts
+import pythonide_types.Strings as Strings
 
 pe.init()
 

@@ -85,9 +85,9 @@ files = [
     'launcher.py'
 ]
 
-for file in os.listdir('pythonize_types'):
+for file in os.listdir('pythonide_types'):
     if file.endswith('.py'):
-        files.append(os.path.join('pythonize_types', file))
+        files.append(os.path.join('pythonide_types', file))
 
 print("Checking virtual environment...")
 

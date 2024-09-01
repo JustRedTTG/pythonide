@@ -1,8 +1,8 @@
 from common import file_name
 from pygameextra.text import Text
 from languages import languages
-from pythonize_types.Config import Config
-import pythonize_types.Strings as Strings
+from pythonide_types.Config import Config
+import pythonide_types.Strings as Strings
 
 
 def configure_top_panel_texts(config: Config):
