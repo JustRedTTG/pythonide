@@ -1,9 +1,10 @@
-from typing import List, Tuple
-
+from typing import List, Tuple, Dict
 from pygameextra import Surface, Draggable
 from pygameextra.text import Text
 from hexicapi.save import save
 from copy import copy as duplicate
+
+from common import cursor_index
 from .Style import Style
 from .Project import Project
 from .Fonts import Fonts
@@ -69,28 +70,30 @@ class Config:
     # Temporary text data
     top_panel_texts: List[Text]
     file_panel_texts: List[Text]
-    top_sub_panel_texts: dict[str, List[Text]]
+    top_sub_panel_texts: Dict[str, List[Text]]
     code_sub_panel_texts: List[Text] = []
     code_sub_panel_texts_selected: List[Text] = []
 
     # Temporary coordination data
     top_panel_text_height: int
     file_panel_text_height: int
-    top_sub_panel_height: dict[str, int]
-    top_sub_panel_width: dict[str, int]
+    top_sub_panel_height: Dict[str, int]
+    top_sub_panel_width: Dict[str, int]
     top_sub_panel_identifier: str
     top_sub_panel_x: int
     code_text_height: int = None
+    code_panel_surface_offset: Tuple[int, int] = (0, 0)
 
     # Temporary file data
-    opened_files_cache: dict[str, str] = {}
+    opened_files_cache: Dict[str, str] = {}
 
     # Cache
     style: Style
     code: List[str] = ['']
     code_texts: List[Texts] = []
     code_hashes: List[int] = []
-    cursor_location: int = 0
+    cursor_location: int
+    _cursor_location: int = 0
     cursor_up_down_max: int = 0
     code_inbetween_draggable: Draggable = None
 
@@ -121,3 +124,19 @@ class Config:
 
     def window_size(self):
         return self.window_width, self.window_height
+
+    def on_cursor_move(self):
+        _, cursor_indexing = cursor_index(self.cursor_location, self.code)
+        cursor_x = self.code_sub_panel_surface.size[0] + self.style.code_panel_padding + self.style.text_spacing * cursor_indexing
+        self.code_panel_surface_offset = (min(self.code_panel_surface.size[0] - cursor_x - 30, 0), 0)
+
+    @property
+    def cursor_location(self):
+        return self._cursor_location
+
+    @cursor_location.setter
+    def cursor_location(self, value):
+        _ = self._cursor_location
+        self._cursor_location = value
+        if _ != self._cursor_location:
+            self.on_cursor_move()
