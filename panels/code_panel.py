@@ -31,6 +31,12 @@ def draw_code_panel(config: Config):
     if config.current_project.file_selected in config.opened_files_cache:
         config.code = config.opened_files_cache[config.current_project.file_selected]
     elif config.current_project.file_selected is None:
+        # Display no file opened
+        text = config.file_panel_texts[-1]
+        pe.display.blit(
+            text.obj,
+            [c//2 - s//2 for c, s in zip(pe.display.get_size(), text.rect.size)]
+        )
         return
     else:
         if not load_selected_file(config):
