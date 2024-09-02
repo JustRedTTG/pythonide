@@ -22,6 +22,8 @@ def save_project(config: Config):
 
 def load_selected_file(config):
     file = config.current_project.file_selected
+    if file is None:
+        return False
     if file == ':new':
         file = os.path.join(config.current_project.path, '.new')
         config.current_project.files_opened[config.current_project.files_opened.index(':new')] = file

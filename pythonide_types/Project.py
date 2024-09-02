@@ -12,7 +12,7 @@ class Project:
     title: str = 'Untitled'
     files_opened: list[str, ...]
     files_cursor_locations: dict[str, int] = {}
-    file_selected: str = ":new"
+    file_selected: str = None
 
     # Settings & window information
     allow_multiple_commands: int = 0  # gps
@@ -25,8 +25,8 @@ class Project:
         if not self.path:
             if_joined_does_not_exist_remake_it(config.cache_folder, "project_temp")
             self.path = os.path.join(config.cache_folder, "project_temp")
-            self.files_opened = [":new"]
-            self.files_cursor_locations = {os.path.join(self.path, '.new'): 999}
+            self.files_opened = []
+            self.files_cursor_locations = {}
             return
         # TODO: add loading of project file and information
 

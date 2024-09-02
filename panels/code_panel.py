@@ -30,6 +30,8 @@ def draw_code_panel(config: Config):
     pe.fill.full(config.style.code)
     if config.current_project.file_selected in config.opened_files_cache:
         config.code = config.opened_files_cache[config.current_project.file_selected]
+    elif config.current_project.file_selected is None:
+        return
     else:
         if not load_selected_file(config):
             del config.current_project.files_opened[
@@ -117,6 +119,8 @@ def code_sub_panel(config: Config):
             config.window_height - height_offset
         ))
         config.code_sub_panel_active = True
+    elif config.current_project.file_selected is None:
+        return
     elif config.code_sub_panel_active:
         pe.fill.full(config.style.background_darker, config.code_sub_panel_surface)  # Fill with background
         y = 0

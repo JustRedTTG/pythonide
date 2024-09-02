@@ -24,7 +24,7 @@ def configure_top_panel_texts(config: Config):
 
 def configure_file_panel_texts(config: Config):
     config.file_panel_texts = []
-    for text in [file_name(path) for path in config.current_project.files_opened]:
+    for text in [file_name(path) for path in config.current_project.files_opened] + ['No files opened']:
         config.file_panel_texts.append(Text(text,
                                             config.font_filepaths.regular,
                                             config.style.file_panel_font_size,

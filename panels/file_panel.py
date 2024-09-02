@@ -8,7 +8,11 @@ def file_panel(config: Config):  # Opened files, not the left panel
     if config.file_panel_active and not config.top_sub_panel_active:
 
         with config.file_panel_surface:
-            pe.fill.full(config.style.background)
+            if len(config.current_project.files_opened) == 0:
+                pe.fill.full(config.style.code)
+                return
+            else:
+                pe.fill.full(config.style.background)
             x = 0
             for i, (file, text) in enumerate(zip(config.current_project.files_opened,
                                                  config.file_panel_texts)):
@@ -27,7 +31,8 @@ def file_panel(config: Config):  # Opened files, not the left panel
                       config.top_panel_text_height),
                      3, config.file_panel_surface)
         x = 0
-        for text in config.file_panel_texts:
+        for i, file in enumerate(config.current_project.files_opened):
+            text = config.file_panel_texts[i]
             x_add = text.rect[2] + config.style.file_panel_button_padding_horizontal
             if text.text == file_name(config.current_project.file_selected):
                 pe.draw.line(config.style.button_select,
