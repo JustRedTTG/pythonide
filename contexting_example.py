@@ -41,8 +41,6 @@ class Main(pe.GameContext):
 
     def post_loop(self):
         super().post_loop()
-        self.previous_buttons.clear()
-
 
 main = Main()
 

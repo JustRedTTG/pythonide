@@ -44,7 +44,7 @@ def top_panel(config: Config):
                     pe.button.rect(rect,  # Draw button
                                    config.style.background, config.style.button_select if config.mouse_moved else config.style.background,
                                    text, hover_action=top_sub_panel,
-                                   hover_data=(config, copy(x), Strings.top_panel_identifiers[i]))
+                                   hover_data=(config, copy(x), Strings.top_panel_identifiers[i]), name=f'top_panel_{i}_active')
                 x += width
             pe.draw.line(config.style.background_shadow,
                          (0, config.top_panel_text_height),
@@ -82,7 +82,7 @@ def top_panel(config: Config):
                                 config.top_panel_text_height),
                                (0, 0, 0, 0), (0, 0, 0, 0),
                                None, hover_action=hover_action,
-                               hover_data=x)
+                               hover_data=x, name=f'top_panel_{i}_soiled')
                 x += width
 
 
@@ -142,16 +142,18 @@ def top_sub_panel(config: Config, x=None, identifier=None):
                             config.top_panel_text_height)
             pe.button.rect(rect_padding,
                            config.style.background, config.style.button_select,
-                           hover_action=pe.draw.rect,
-                           hover_data=(config.style.button_select,
+                           hover_draw_action=pe.draw.rect,
+                           hover_draw_data=(config.style.button_select,
                                        rect_text, 0
-                                       ), action=on_top_panel, data=(config, identifier, button_identifier))
+                                       ), action=on_top_panel, data=(config, identifier, button_identifier),
+                           name=f'top_sub_panel_{i}_front')
             pe.button.rect(rect_text,
                            (0, 0, 0, 0), config.style.button_select,
-                           text, hover_action=pe.draw.rect,
-                           hover_data=(config.style.button_select,
+                           text, hover_draw_action=pe.draw.rect,
+                           hover_draw_data=(config.style.button_select,
                                        rect_padding, 0
-                                       ), action=on_top_panel, data=(config, identifier, button_identifier))
+                                       ), action=on_top_panel, data=(config, identifier, button_identifier),
+                           name=f'top_sub_panel_{i}_end')
             if not config.top_sub_panel_active:
                 return
 

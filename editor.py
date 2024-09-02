@@ -17,21 +17,21 @@ from panels.left_panel import left_panel
 from panels.top_panel import top_panel
 from panels.ui_panels import handle_ui_panels, draw_ui_panel_extra
 from pythonide_types.Config import Config
-from pythonide_types.Texts import Texts
-import pythonide_types.Strings as Strings
 from pygameextra import settings as s
 
+s.raise_error_for_button_without_name = True
 
 class PythonideEditor:
     def __init__(self):
         self.logger = Logger()
-        self.config = cfg_mngr.initialize()
+        self.config: Config = cfg_mngr.initialize()
+        self.button_manager = pe.ButtonManager()
         load_project(self.config)
         configure_texts(self.config)
         configure_draggables(self.config)
 
     def activate(self):
-        pe.settings.pythonide_config = self.config
+        s.pythonide_config = self.config
 
 
 def loop(instance: PythonideEditor):
@@ -50,7 +50,7 @@ def loop(instance: PythonideEditor):
     pe.display.blit(instance.config.file_panel_surface, instance.config.file_panel_surface.pos)
     pe.display.blit(instance.config.left_panel_surface, instance.config.left_panel_surface.pos)
     pe.display.blit(instance.config.top_panel_surface)
-    for ui_panel_surface in reversed(instance.config.ui_panel_surfaces):
+    for ui_panel_surface in instance.config.ui_panel_surfaces:
         draw_ui_panel_extra(instance.config, ui_panel_surface)
         pe.display.blit(ui_panel_surface, ui_panel_surface.pos)
 
@@ -78,7 +78,9 @@ if __name__ == "__main__":
     pe.display.make(instance.config.window_size(), create_title(instance.config), pe.display.DISPLAY_MODE_RESIZABLE)
 
     while instance.config.running:
+        instance.button_manager.push_buttons()
         handle_events(instance.config)
         other_events(instance.config)
         loop(instance)
         pe.display.update(60)
+        instance.button_manager.handle_buttons()

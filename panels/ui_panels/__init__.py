@@ -12,32 +12,53 @@ PANEL_TYPES = {
 }
 
 
-def handle_ui_panels(config: Config):
-    for ui_panel_surface in config.ui_panel_surfaces:
-        data = config.ui_panel_data[id(ui_panel_surface)]
-        moving, pos = data['draggable'].check()
-        data['pos'] = [
-            pos[0],
-            pos[1] + config.ui_panel_text_height,
-        ]
-        ui_panel_surface.pos = data['pos']
-        ui_panel_surface.last_blit_pos = data['pos']
-        if moving:
-            return
-        with ui_panel_surface:
-            pe.fill.full(config.style.background)
-            PANEL_TYPES[data['type']](config, data)
-            pe.draw.rect(config.style.background_shadow, (0, 0, *ui_panel_surface.size), 1)
-
-
 def close_ui_panel(config: Config, ui_panel_surface: pe.Surface):
     config.ui_panel_surfaces.remove(ui_panel_surface)
     del config.ui_panel_data[id(ui_panel_surface)]
 
 
+def focus_ui_panel(config: Config, ui_panel_surface: pe.Surface):
+    config.ui_panel_surfaces.remove(ui_panel_surface)
+    config.ui_panel_surfaces.append(ui_panel_surface)
+
+
+def handle_ui_panels(config: Config):
+    for i, ui_panel_surface in enumerate(config.ui_panel_surfaces):
+        my_id = id(ui_panel_surface)
+        data = config.ui_panel_data[my_id]
+        moving, pos = data['draggable'].check()
+        focused = i == len(config.ui_panel_surfaces) - 1
+
+        data['pos'] = [
+            pos[0],
+            pos[1] + config.ui_panel_text_height,
+        ]
+        if moving and not focused:
+            focus_ui_panel(config, ui_panel_surface)
+            focused = True
+            moving = False
+        ui_panel_surface.pos = data['pos']
+        ui_panel_surface.last_blit_pos = data['pos']
+        if moving:
+            continue
+        with ui_panel_surface:
+            outline_rect = (0, 0, *pe.display.get_size())
+            if focused:
+                pe.fill.full(config.style.background)
+                pe.button.action(outline_rect, name=f'ui_panel_handler_{my_id}_focused')
+                PANEL_TYPES[data['type']](config, data)
+                pe.draw.rect(config.style.background_shadow, outline_rect, 1)
+            else:
+                pe.draw.rect(config.style.background_darker, outline_rect, 1)
+                pe.draw.line(config.style.background_shadow, (0, 0), (pe.display.get_width(), 0), 1)
+                pe.button.action(outline_rect, action=focus_ui_panel,
+                               data=(config, ui_panel_surface), name=f'ui_panel_handler_{my_id}_not_focused')
+
+
 def draw_ui_panel_extra(config: Config, ui_panel_surface: pe.Surface):
     rect = pe.Rect(*ui_panel_surface.pos, *ui_panel_surface.size)
-    data = config.ui_panel_data[id(ui_panel_surface)]
+    my_id = id(ui_panel_surface)
+    data = config.ui_panel_data[my_id]
 
     rect.height += config.ui_panel_text_height
     rect.y -= config.ui_panel_text_height
@@ -69,13 +90,16 @@ def draw_ui_panel_extra(config: Config, ui_panel_surface: pe.Surface):
     pe.button.rect(
         close_rect,
         (0, 0, 0, 0), config.style.button_select,
-        action=close_ui_panel, data=(config, ui_panel_surface)
+        action=close_ui_panel, data=(config, ui_panel_surface),
+        name=f'draw_ui_panel_extra_{my_id}_closed'
     )
     close_text.display()
 
 
 def get_ui_panel_size(config: Config, panel_type: str):
-    return 550, 300
+    rect = pe.Rect(0, 0, *config.window_size())
+    rect.scale_by_ip(0.7, 0.7)
+    return rect.size
 
 
 def create_ui_panel(config: Config, panel_type: str, panel_data: dict = None, ensure_one=False):
@@ -93,11 +117,11 @@ def create_ui_panel(config: Config, panel_type: str, panel_data: dict = None, en
 
     config.ui_panel_data[id(config.ui_panel_surfaces[-1])] = {
         'type': panel_type,
+        **panel_data,
         # The draggable is the header, has to be above the position
         'draggable': pe.Draggable(
             (position[0], position[1] - config.ui_panel_text_height),
-            (panel_size[0]-config.ui_panel_texts['close'].rect.width, config.ui_panel_text_height)
+            (panel_size[0] - config.ui_panel_texts['close'].rect.width, config.ui_panel_text_height)
         ),
         'pos': position,
-        **panel_data
     }
