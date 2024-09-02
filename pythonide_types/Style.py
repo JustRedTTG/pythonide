@@ -24,6 +24,9 @@ class Style:
     file_panel_button_padding_vertical: int = 10
     file_panel_selected_size: int = 10
 
+    ui_panel_button_padding_horizontal: int = 30
+    ui_panel_button_padding_vertical: int = 10
+
     code_panel_padding: int = 5
 
     # other
@@ -34,6 +37,7 @@ class Style:
     top_panel_font_size: int = 12
     top_sub_panel_font_size: int = top_panel_font_size
     file_panel_font_size: int = 12
+    ui_panel_font_size: int = 12
     code_panel_font_size: int = 12
     code_sub_panel_font_size: int = 12
     text_spacing: int  # Set using space char

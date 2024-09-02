@@ -58,7 +58,19 @@ def configure_top_sub_panel_texts(config, identifier, i):
             config.style.top_sub_panel_button_padding_vertical
 
 
+def configure_ui_panel_texts(config: Config):
+    for key, text in languages[config.language].ui_panel_texts.items():
+        config.ui_panel_texts[key] = Text(
+            text,
+            config.font_filepaths.regular,
+            config.style.ui_panel_font_size,
+            colors=(config.style.text_color, None)
+        )
+    config.ui_panel_text_height = config.ui_panel_texts[key].rect[3] + config.style.ui_panel_button_padding_vertical
+
+
 def configure_texts(config: Config):
     configure_top_panel_texts(config)
     configure_file_panel_texts(config)
+    configure_ui_panel_texts(config)
     config.style.text_spacing = Text(' ', config.font_filepaths.regular, config.style.code_panel_font_size).rect[2]

@@ -2,6 +2,7 @@ from copy import copy
 
 import pygameextra as pe
 from common import mouse_rect, surface_rect
+from panels.ui_panels import create_ui_panel
 from pythonide_types import Strings
 from pythonide_types.Config import Config
 
@@ -91,6 +92,14 @@ def on_top_panel(config: Config, identifier, sub):
     # config.top_sub_panel_identifier = None
     config.top_sub_panel_active = False
     config.top_panel_active = True
+    # print(identifier, sub)
+
+    if identifier == 'file':
+        if sub in ('new', 'open'):
+            create_ui_panel(config, f'file_{sub}', ensure_one=True)
+        else:
+            create_ui_panel(config, sub, ensure_one=True)
+
 
 
 def top_sub_panel(config: Config, x=None, identifier=None):

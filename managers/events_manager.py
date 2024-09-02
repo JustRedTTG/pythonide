@@ -2,6 +2,7 @@ import time
 import pygameextra as pe
 from managers.config_manager import Config
 from common import cursor_index, custom_split
+from panels.ui_panels import create_ui_panel
 
 
 def get_cursor_line(config: Config):
@@ -87,6 +88,14 @@ def resize_event(config: Config, size=None):
     config.file_panel_surface = None
     config.left_panel_surface = None
     config.top_panel_active = False
+    config.mouse_moved = False
+    config.ui_panel_surfaces.clear()
+    all_data = list(config.ui_panel_data.values())
+    config.ui_panel_data.clear()
+    for i, data in enumerate(all_data):
+        print(data)
+        create_ui_panel(config, data['type'], data)
+
 
     config.top_sub_panel_active = False
     config.left_panel_active = False

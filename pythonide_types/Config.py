@@ -49,6 +49,8 @@ class Config:
     top_sub_panel_surface: Surface = None
     code_panel_surface: Surface = None
     code_sub_panel_surface: Surface = None
+    ui_panel_surfaces: List[Surface] = []
+    ui_panel_data: Dict[int, Dict] = {}
 
     # Temporary switches
     running: bool = True
@@ -76,10 +78,12 @@ class Config:
     top_sub_panel_texts: Dict[str, List[Text]]
     code_sub_panel_texts: List[Text] = []
     code_sub_panel_texts_selected: List[Text] = []
+    ui_panel_texts: Dict[str, Text] = {}
 
     # Temporary coordination data
     top_panel_text_height: int
     file_panel_text_height: int
+    ui_panel_text_height: int
     top_sub_panel_height: Dict[str, int]
     top_sub_panel_width: Dict[str, int]
     top_sub_panel_identifier: str = None

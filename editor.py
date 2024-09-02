@@ -15,6 +15,7 @@ from panels.code_panel import code_sub_panel, code_panel
 from panels.file_panel import file_panel
 from panels.left_panel import left_panel
 from panels.top_panel import top_panel
+from panels.ui_panels import handle_ui_panels, draw_ui_panel_extra
 from pythonide_types.Config import Config
 from pythonide_types.Texts import Texts
 import pythonide_types.Strings as Strings
@@ -36,17 +37,22 @@ class PythonideEditor:
 def loop(instance: PythonideEditor):
     if instance.config.previous_mouse_pos is None:
         instance.config.previous_mouse_pos = pe.mouse.pos()
+
     top_panel(instance.config)  # File, edit, so on
     left_panel(instance.config)  # Files tree view
     file_panel(instance.config)  # files select
     code_sub_panel(instance.config)  # Code line numbers
     code_panel(instance.config)  # Code editor
+    handle_ui_panels(instance.config)  # Menus and stuff
 
     pe.display.blit(instance.config.code_panel_surface, instance.config.code_panel_surface.pos)
     pe.display.blit(instance.config.code_sub_panel_surface, instance.config.code_panel_surface.pos)
     pe.display.blit(instance.config.file_panel_surface, instance.config.file_panel_surface.pos)
     pe.display.blit(instance.config.left_panel_surface, instance.config.left_panel_surface.pos)
     pe.display.blit(instance.config.top_panel_surface)
+    for ui_panel_surface in reversed(instance.config.ui_panel_surfaces):
+        draw_ui_panel_extra(instance.config, ui_panel_surface)
+        pe.display.blit(ui_panel_surface, ui_panel_surface.pos)
 
     # Display dialogs above all else
     if instance.config.top_sub_panel_surface:
