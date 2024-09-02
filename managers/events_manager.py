@@ -78,22 +78,25 @@ def new_line(config: Config):
     config.code_sub_panel_active = True
 
 
+def resize_event(config: Config, size=None):
+    config.window_width, config.window_height = pe.display.get_size() if size is None else size
+    config.top_panel_surface = None
+    config.top_sub_panel_surface = None
+    config.code_panel_surface = None
+    config.code_sub_panel_surface = None
+    config.file_panel_surface = None
+    config.left_panel_surface = None
+    config.top_panel_active = False
+
+    config.top_sub_panel_active = False
+    config.left_panel_active = False
+    config.file_panel_active = False
+    config.code_panel_active = False
+    config.code_sub_panel_active = False
+
 def handle_event(event: pe.pygame.event.Event, config: Config):
     if pe.event.resizeCheck():
-        config.window_width, config.window_height = pe.display.get_size()
-        config.top_panel_surface = None
-        config.top_sub_panel_surface = None
-        config.code_panel_surface = None
-        config.code_sub_panel_surface = None
-        config.file_panel_surface = None
-        config.left_panel_surface = None
-        config.top_panel_active = False
-
-        config.top_sub_panel_active = False
-        config.left_panel_active = False
-        config.file_panel_active = False
-        config.code_panel_active = False
-        config.code_sub_panel_active = False
+        resize_event(config)
 
     if pe.event.key_DOWN(pe.pygame.K_LEFT):
         prev = get_cursor_line(config)
@@ -172,13 +175,14 @@ def handle_event(event: pe.pygame.event.Event, config: Config):
 
     if pe.event.quitCheck():
         config.save()
-        pe.Pquit()
+        pe.pge_quit()
 
 
 handle_events = lambda config: [handle_event(pe.event.c, config) for pe.event.c in pe.event.get()]
 
 
 def other_events(config):
+
     if config.cursor_hold_right and \
             time.time() - config.cursor_hold_right >= config.cursor_start_delay:
         prev = get_cursor_line(config)

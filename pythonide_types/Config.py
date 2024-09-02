@@ -51,12 +51,15 @@ class Config:
     code_sub_panel_surface: Surface = None
 
     # Temporary switches
+    running: bool = True
     top_panel_active: bool = False
     top_sub_panel_active: bool = False
+    top_panel_soiled: bool = False
     left_panel_active: bool = False
     file_panel_active: bool = False
     code_panel_active: bool = False
     code_sub_panel_active: bool = False
+    mouse_moved: bool = False
     syntax_color_lock: Tuple[int, int, int] = None
     cursor_hold_left: int = 0
     cursor_hold_right: int = 0
@@ -79,10 +82,11 @@ class Config:
     file_panel_text_height: int
     top_sub_panel_height: Dict[str, int]
     top_sub_panel_width: Dict[str, int]
-    top_sub_panel_identifier: str
-    top_sub_panel_x: int
+    top_sub_panel_identifier: str = None
+    top_sub_panel_x: int = 0
     code_text_height: int = None
     code_panel_surface_offset: Tuple[int, int] = (0, 0)
+    previous_mouse_pos: Tuple[int, int] = None
 
     # Temporary file data
     opened_files_cache: Dict[str, str] = {}

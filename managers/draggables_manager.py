@@ -1,4 +1,4 @@
-from pygameextra.mouse import Draggable
+from pygameextra import Draggable
 from pythonide_types.Config import Config
 
 
