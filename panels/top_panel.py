@@ -109,6 +109,7 @@ def top_sub_panel(config: Config, x=None, identifier=None):
 
     # Set position and activate
     config.top_sub_panel_surface.pos = (x, config.top_panel_text_height - 1)
+    config.top_sub_panel_surface.last_blit_pos = config.top_sub_panel_surface.pos
     config.top_sub_panel_active = True
 
     with config.top_sub_panel_surface:
