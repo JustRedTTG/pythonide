@@ -4,6 +4,7 @@ from common import darken
 
 class Style:
     # Colors
+    theme_type: str = "D"
     background: tuple[int, int, int]
     background_darker: tuple[int, int, int]
     background_shadow: tuple[int, int, int]
@@ -71,5 +72,5 @@ def from_pallet(darkest_color: tuple[int, int, int],
 
 
 def from_json(json: dict):
-    # TODO: add json compatability for themes
+    # TODO: add json compatibility for themes
     pass

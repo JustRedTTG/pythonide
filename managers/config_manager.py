@@ -3,6 +3,7 @@ import appdirs
 from hexicapi.save import load
 from common import APP_NAME, APP_AUTHOR, APP_CHANNEL, APP_EXTENSION, if_it_does_not_exist_make_it, join_exists
 from pythonide_types.Config import Config
+from pythonide_types.Icons import Icons
 from pythonide_types.Project import Project
 from pythonide_types.Fonts import Fonts
 from .style_manager import get_style
@@ -39,7 +40,9 @@ def initialize() -> Config:
 
     # Fonts
     if_it_does_not_exist_make_it(os.path.join(data_folder, 'fonts'))
+    if_it_does_not_exist_make_it(os.path.join(data_folder, 'icons'))
     config.font_filepaths = Fonts()
+    config.icon_filepaths = Icons(config)
     config.font_filepaths.regular = os.path.join(data_folder, 'fonts', config.font_filepaths.regular)
     config.font_filepaths.regular_italic = os.path.join(data_folder, 'fonts', config.font_filepaths.regular_italic)
 
@@ -48,8 +51,10 @@ def initialize() -> Config:
 
     config.font_filepaths.thin = os.path.join(data_folder, 'fonts', config.font_filepaths.thin)
     config.font_filepaths.thin_italic = os.path.join(data_folder, 'fonts', config.font_filepaths.thin_italic)
+    config.icon_filepaths.map = lambda x: os.path.join(data_folder, 'icons', x)
 
     config.font_filepaths.health_check()
+    config.icon_filepaths.health_check()
 
     return config
 

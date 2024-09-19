@@ -93,7 +93,6 @@ def resize_event(config: Config, size=None):
     all_data = list(config.ui_panel_data.values())
     config.ui_panel_data.clear()
     for i, data in enumerate(all_data):
-        print(data)
         create_ui_panel(config, data['type'], data)
 
 

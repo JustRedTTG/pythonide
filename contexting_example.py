@@ -11,7 +11,7 @@ class PythonideContext(pe.Context):
 
     def __init__(self):
         super().__init__()
-        self.pythonide_instance = PythonideEditor()
+        self.pythonide_instance = PythonideEditor(False)
         pythonide_events_manager.resize_event(self.pythonide_instance.config, self.AREA)
 
     def handle_event(self, e):

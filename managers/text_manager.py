@@ -18,7 +18,7 @@ def configure_top_panel_texts(config: Config):
                                            config.style.top_panel_font_size,
                                            colors=(config.style.text_color, None)
                                            ))
-        configure_top_sub_panel_texts(config, identifier, i)
+    configure_top_sub_panel_texts(config)
     config.top_panel_text_height = config.top_panel_texts[0].rect[3] + config.style.top_panel_button_padding_vertical
 
 
@@ -33,29 +33,31 @@ def configure_file_panel_texts(config: Config):
     config.file_panel_text_height = config.file_panel_texts[0].rect[3] + config.style.file_panel_button_padding_vertical
 
 
-def configure_top_sub_panel_texts(config, identifier, i):
-    config.top_sub_panel_texts[identifier] = []
-    config.top_sub_panel_width[identifier] = config.top_panel_texts[i].rect[2] + \
-                                             config.style.top_panel_button_padding_horizontal
-    config.top_sub_panel_height[identifier] = 0
-    for text in languages[config.language].top_sub_panel_texts[identifier]:
-        if identifier == '_%_' or text == '_%_':
-            config.top_sub_panel_texts[identifier].append(None)
-            continue
-        config.top_sub_panel_texts[identifier].append(Text(text,
-                                                           config.font_filepaths.thin,
-                                                           config.style.top_sub_panel_font_size,
-                                                           colors=(config.style.text_color, None)
-                                                           ))
+def configure_top_sub_panel_texts(config):
+    for i, identifier in enumerate(Strings.top_panel_identifiers):
+        config.top_sub_panel_texts[identifier] = []
+        config.top_sub_panel_width[identifier] = config.top_panel_texts[i].rect[2] + \
+                                                 config.style.top_panel_button_padding_horizontal
+        config.top_sub_panel_height[identifier] = 0
+        for sub_identifier in Strings.top_sub_panel_identifiers[identifier]:
+            if sub_identifier.startswith('_') and sub_identifier.endswith('_'):
+                config.top_sub_panel_texts[identifier].append(None)
+                continue
+            text = languages[config.language].top_sub_panel_texts[sub_identifier]
+            config.top_sub_panel_texts[identifier].append(Text(text,
+                                                               config.font_filepaths.thin,
+                                                               config.style.top_sub_panel_font_size,
+                                                               colors=(config.style.text_color, None)
+                                                               ))
 
-        config.top_sub_panel_width[identifier] = max(
-            config.top_sub_panel_width[identifier],
-            config.top_sub_panel_texts[identifier][-1].rect[2] +
-            config.style.top_sub_panel_button_padding_horizontal
-        )
-        config.top_sub_panel_height[identifier] += \
-            config.top_sub_panel_texts[identifier][-1].rect[3] + \
-            config.style.top_sub_panel_button_padding_vertical
+            config.top_sub_panel_width[identifier] = max(
+                config.top_sub_panel_width[identifier],
+                config.top_sub_panel_texts[identifier][-1].rect[2] +
+                config.style.top_sub_panel_button_padding_horizontal
+            )
+            config.top_sub_panel_height[identifier] += \
+                config.top_sub_panel_texts[identifier][-1].rect[3] + \
+                config.style.top_sub_panel_button_padding_vertical
 
 
 def configure_ui_panel_texts(config: Config):

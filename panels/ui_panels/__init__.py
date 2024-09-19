@@ -1,6 +1,7 @@
 import pygameextra as pe
 
 from panels.ui_panels.file.new_project import handle_new_project_panel
+from panels.ui_panels.file.open_project import handle_open_project_panel
 from panels.ui_panels.file.settings import handle_settings_panel
 from pythonide_types.Config import Config
 
@@ -8,7 +9,7 @@ PANEL_TYPES = {
     'new_project': handle_new_project_panel,
     'settings': handle_settings_panel,
     'file_new': handle_settings_panel,  # TODO: Implement
-    'file_open': handle_settings_panel,  # TODO: Implement
+    'file_open': handle_open_project_panel
 }
 
 
@@ -125,3 +126,5 @@ def create_ui_panel(config: Config, panel_type: str, panel_data: dict = None, en
         ),
         'pos': position,
     }
+    with config.ui_panel_surfaces[-1]:
+        PANEL_TYPES[panel_type](config, config.ui_panel_data[id(config.ui_panel_surfaces[-1])], new=True)

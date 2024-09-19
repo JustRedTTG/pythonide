@@ -1,10 +1,11 @@
 from typing import List, Tuple, Dict
-from pygameextra import Surface, Draggable
+from pygameextra import Surface, Draggable, Sprite
 from pygameextra.text import Text
 from hexicapi.save import save
 from copy import copy as duplicate
 
 from common import cursor_index
+from .Icons import Icons
 from .Style import Style
 from .Project import Project
 from .Fonts import Fonts
@@ -41,6 +42,7 @@ class Config:
     data_folder: str
     cache_folder: str
     font_filepaths: Fonts
+    icon_filepaths: Icons
 
     # Temporary surfaces
     left_panel_surface: Surface = None
@@ -51,6 +53,7 @@ class Config:
     code_sub_panel_surface: Surface = None
     ui_panel_surfaces: List[Surface] = []
     ui_panel_data: Dict[int, Dict] = {}
+    icons: Dict[str, Sprite] = {}
 
     # Temporary switches
     running: bool = True

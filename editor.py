@@ -21,11 +21,12 @@ from pygameextra import settings as s
 
 s.raise_error_for_button_without_name = True
 
+
 class PythonideEditor:
-    def __init__(self):
+    def __init__(self, set_as_context: bool = True):
         self.logger = Logger()
         self.config: Config = cfg_mngr.initialize()
-        self.button_manager = pe.ButtonManager()
+        self.button_manager = pe.ButtonManager(set_as_context)
         load_project(self.config)
         configure_texts(self.config)
         configure_draggables(self.config)
@@ -37,6 +38,8 @@ class PythonideEditor:
 def loop(instance: PythonideEditor):
     if instance.config.previous_mouse_pos is None:
         instance.config.previous_mouse_pos = pe.mouse.pos()
+    if len(instance.config.icons) == 0:
+        instance.config.icon_filepaths.load_icons()
 
     top_panel(instance.config)  # File, edit, so on
     left_panel(instance.config)  # Files tree view
